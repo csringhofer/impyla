@@ -15,7 +15,7 @@
 from __future__ import absolute_import
 
 import ez_setup
-ez_setup.use_setuptools()
+ez_setup.use_setuptools(version="44.1.1")
 
 from setuptools import setup, find_packages
 

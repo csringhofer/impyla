@@ -42,7 +42,7 @@ def connect(host='localhost', port=21050, database=None, timeout=None,
             protocol=None, krb_host=None, use_http_transport=False,
             http_path='', auth_cookie_names=None, http_cookie_names=None,
             retries=3, jwt=None, user_agent=None,
-            get_user_custom_headers_func=None, verify_cert=False):
+            get_user_custom_headers_func=None, verify_cert=True):
     """Get a connection to HiveServer2 (HS2).
 
     These options are largely compatible with the impala-shell command line
@@ -64,8 +64,9 @@ def connect(host='localhost', port=21050, database=None, timeout=None,
         Enable SSL.
     ca_cert : str, optional
         Local path to the the third-party CA certificate. If set, the server certificate
-        will be verified using the provided CA cert. If SSL is enabled but
-        the certificate is not specified, see 'verify_cert' for behavior.
+        will be verified using the provided CA cert instead of the system's CA
+        certificates. If SSL is enabled but the certificate is not specified, see
+        'verify_cert' for behavior.
     auth_mechanism : {'NOSASL', 'PLAIN', 'GSSAPI', 'LDAP', 'JWT'}
         Specify the authentication mechanism. `'NOSASL'` for unsecured Impala.
         `'PLAIN'` for unsecured Hive (because Hive requires the SASL
@@ -108,11 +109,14 @@ def connect(host='localhost', port=21050, database=None, timeout=None,
         This is a function returning a list of tuples, each tuple contains a key-value
         pair. This allows duplicate headers to be set.
     verify_cert : bool, optional
-        Whether to verify the server's TLS certificate when using SSL using the systems's
-        CA certificates. Ignored if 'ca_cert' is provided, in which case the certificate
-        will be verified using the provided CA cert.
+        Whether to verify the server's TLS certificate against the system's CA
+        certificates when using SSL. Defaults to True. Set to False to disable
+        verification. Ignored if 'ca_cert' is provided, in which case the certificate
+        is always verified using the provided CA cert.
 
-        .. deprecated:: 0.18.0
+        .. versionchanged:: 0.25.0
+            The default changed from False to True, so SSL connections verify the
+            server certificate unless 'verify_cert=False' is passed.
     auth_cookie_names : list of str or str, optional
         Use `http_cookie_names` parameter instead.
 

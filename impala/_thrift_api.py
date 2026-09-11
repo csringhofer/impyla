@@ -408,7 +408,7 @@ def get_http_transport(host, port, http_path, timeout=None, use_ssl=False,
                        ca_cert=None, auth_mechanism='NOSASL', user=None,
                        password=None, kerberos_host=None, kerberos_service_name=None,
                        http_cookie_names=None, jwt=None, user_agent=None,
-                       get_user_custom_headers_func=None, verify_cert=False):
+                       get_user_custom_headers_func=None, verify_cert=True):
     host_url = "[%s]" % host if ":" in host else host # add brackets for ipv6 address
     # TODO: support timeout
     if timeout is not None:

@@ -241,7 +241,8 @@ class ImpalaConnectionTests(unittest.TestCase):
     @pytest.mark.skipif(SSL_DISABLED, reason=SSL_DISABLED_ERROR)
     @pytest.mark.ssl
     def test_ssl_connection_no_cert(self):
-        self.connection = connect(ENV.host, ENV.port, timeout=TIMEOUT_S, use_ssl=True)
+        self.connection = connect(
+            ENV.host, ENV.port, timeout=TIMEOUT_S, use_ssl=True, verify_cert=False)
         self._execute_queries(self.connection)
 
 
@@ -267,9 +268,9 @@ class ImpalaConnectionTests(unittest.TestCase):
     @pytest.mark.ssl
     def test_ssl_connection_default_certs(self):
         try:
-            # With verify_cert=True, the system's CA certificates will be used to verify
-            # the server certificate. Since the server certificate is self-signed and not
-            # in the system CA store, verification should fail.
+            # verify_cert=True (also the default) uses the system's CA certificates to
+            # verify the server certificate. Since the server certificate is self-signed
+            # and not in the system CA store, verification should fail.
             # TODO: writing positive test would be nice but is more difficult
             connect(
                 ENV.host, ENV.port, use_ssl=True, timeout=TIMEOUT_S, verify_cert=True)
@@ -282,7 +283,8 @@ class ImpalaConnectionTests(unittest.TestCase):
     @pytest.mark.ssl
     def test_https_connection_nocert(self):
         self.connection = connect(ENV.host, ENV.http_port, use_http_transport=True,
-                                  http_path="cliservice", use_ssl=True, timeout=TIMEOUT_S)
+                                  http_path="cliservice", use_ssl=True, timeout=TIMEOUT_S,
+                                  verify_cert=False)
         self._execute_queries(self.connection)
 
     @pytest.mark.skipif(SSL_DISABLED, reason=SSL_DISABLED_ERROR)
@@ -310,9 +312,9 @@ class ImpalaConnectionTests(unittest.TestCase):
     @pytest.mark.ssl
     def test_https_connection_default_certs(self):
         try:
-            # With verify_cert=True, the system's CA certificates will be used to verify
-            # the server certificate. Since the server certificate is self-signed and not
-            # in the system CA store, verification should fail.
+            # verify_cert=True (also the default) uses the system's CA certificates to
+            # verify the server certificate. Since the server certificate is self-signed
+            # and not in the system CA store, verification should fail.
             # TODO: writing positive test would be nice but is more difficult
             connection = connect(ENV.host, ENV.http_port, use_http_transport=True,
                                  http_path="cliservice", use_ssl=True, timeout=TIMEOUT_S,

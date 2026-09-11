@@ -164,15 +164,18 @@ df = as_pandas(cur)
 # carry df through scikit-learn, for example
 ```
 
-For secure connection set use_ssl=True in connect(). Warning: this doesn't verify the server
-by default! To verify server set verify_cert or ca_cart perameter:
+For a secure connection set use_ssl=True in connect(). Since 0.25.0 this verifies the
+server's certificate against the system's CA certificates by default:
 
 ```python
-# Verify server using system CA certificates:
-conn = connect(host='my.host.com', use_ssl=True, verify_cert=True)
+# Verify server using system CA certificates (the default):
+conn = connect(host='my.host.com', use_ssl=True)
 
-# Verify server using custom CA certificate:
-conn = connect(host='my.host.com', use_ssl=True, ca_cart="/tmp/my_cert.pem")
+# Verify server using a custom CA certificate:
+conn = connect(host='my.host.com', use_ssl=True, ca_cert="/tmp/my_cert.pem")
+
+# Disable verification (insecure). Before 0.25.0 this was the default behavior.
+conn = connect(host='my.host.com', use_ssl=True, verify_cert=False)
 ```
 
 [pep249]: http://legacy.python.org/dev/peps/pep-0249/

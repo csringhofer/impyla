@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.25
+------
+* **Breaking changes**
+  - SSL certificate verification is now on by default. `connect(use_ssl=True)`
+    now verifies the server's certificate against the system's CA certificates
+    (or against `ca_cert` if provided). Previously `verify_cert` defaulted to
+    False and the server was not verified unless `verify_cert=True` or `ca_cert`
+    was set. Pass `verify_cert=False` to restore the old, insecure behavior.
+
 0.24
 ------
 * **Breaking changes**
